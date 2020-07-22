@@ -1,4 +1,4 @@
 
-## About Laravel Starter Boilerplate
+## About Laravel inertia-starter Boilerplate
 
-This is a starter boilerplate I created to kickstart my next laravel projects
+This is a inertia-starter boilerplate I created to kickstart my next laravel projects

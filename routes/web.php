@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,6 +15,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 require 'routes/auth.php';
+Route::get('/', DashboardController::class)->name('dashboard');
 
 Route::group(['middleware' => 'verified'], function () {
     // includeRouteFiles(__DIR__.'/backend/');

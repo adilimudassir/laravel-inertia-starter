@@ -1,5 +1,7 @@
 const mix = require('laravel-mix');
 
+const VuetifyLoaderPlugin = require('vuetify-loader/lib/plugin')
+
 /*
  |--------------------------------------------------------------------------
  | Mix Asset Management
@@ -11,43 +13,22 @@ const mix = require('laravel-mix');
  |
  */
 
-
-mix.setPublicPath('public')
-    .setResourceRoot('../') // Turns assets paths in css relative to css file
-    .sass('resources/sass/app.scss', 'css')
-    .js('resources/js/app.js', 'js')
-    .extract([
-        'jquery',
-        'jquery-browser',
-        'jquery.placeholder',
-        'magnific-popup',
-        'nanoscroller',
-        'bootstrap',
-        'popper.js',
-        'axios',
-        'lodash',
-        'alpinejs',
-        'bootstrap-datepicker',
-        'animate.css',
-        '@fortawesome/fontawesome-free',
-        'sweetalert2'
-
-    ])
-    .sourceMaps();
-
-if (mix.inProduction()) {
-    mix.version()
-        .options({
-            // Optimize JS minification process
-            terser: {
-                cache: true,
-                parallel: true,
-                sourceMap: true
-            }
-        });
-} else {
-    // Uses inline source-maps on development
-    mix.webpackConfig({
-        devtool: 'inline-source-map'
-    });
-}
+    mix.js('resources/js/app.js', 'public/js')
+    .sass('resources/sass/app.scss', 'public/css')
+    .webpackConfig({
+        output: { chunkFilename: 'js/[name].js?id=[chunkhash]' },
+        resolve: {
+            alias: {
+                vue$: 'vue/dist/vue.runtime.esm.js',
+                '@': path.resolve('resources/js'),
+            },
+        },
+    })
+    .extend('vuetify', new class {
+        webpackConfig(config) {
+            config.plugins.push(new VuetifyLoaderPlugin())
+        }
+    })
+    .vuetify()
+    .version()
+    .sourceMaps()
