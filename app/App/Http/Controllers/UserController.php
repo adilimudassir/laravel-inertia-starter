@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Inertia\Inertia;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserFormRequest;
 use Domains\Auth\Repositories\RoleRepository;
@@ -30,8 +31,8 @@ class UserController extends Controller
     {
         $this->authorize('read-users');
 
-        return view('users.index', [
-            //
+        return Inertia::render('Users/Index', [
+            'users' => $this->userRepository->all(['id', 'name', 'email', 'created_at'])
         ]);
     }
 
@@ -39,8 +40,8 @@ class UserController extends Controller
     {
         $this->authorize('create-users');
 
-        return view('users.create', [
-            'roles' => $roleRepository->all()->pluck('name', 'id'),
+        return inertia::render('Users/Create', [
+            'roles' => $roleRepository->all(['name', 'id']),
         ]);
     }
 
@@ -52,14 +53,14 @@ class UserController extends Controller
 
         return redirect()
             ->route('users.index')
-            ->withFlashSuccess('User Added Successfully!');
+            ->withSuccess('User Added Successfully!');
     }
 
     public function show($id)
     {
         $this->authorize('read-users');
 
-        return view('users.show', [
+        return Inertia::render('Users/Show', [
             'user' => $this->userRepository->getById($id),
         ]);
     }
@@ -68,7 +69,7 @@ class UserController extends Controller
     {
         $this->authorize('update-users');
 
-        return view('users.edit', [
+        return Inertia::render('Users/Edit', [
             'user' => $this->userRepository->getById($id),
             'roles' => $roleRepository->all()->pluck('name', 'id'),
         ]);
@@ -85,7 +86,7 @@ class UserController extends Controller
 
         return redirect()
             ->route('users.index')
-            ->withFlashSuccess('User Updated Successfully!');
+            ->withSuccess('User Updated Successfully!');
     }
 
     public function destroy($id)
@@ -96,6 +97,6 @@ class UserController extends Controller
 
         return redirect()
             ->route('users.index')
-            ->withFlashSuccess('User Deleted Successfully!');
+            ->withSuccess('User Deleted Successfully!');
     }
 }

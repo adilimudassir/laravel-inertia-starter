@@ -15,7 +15,6 @@ use App\Http\Controllers\DashboardController;
 */
 
 require 'routes/auth.php';
-Route::get('/', DashboardController::class)->name('dashboard');
 
 Route::group(['middleware' => 'verified'], function () {
     // includeRouteFiles(__DIR__.'/backend/');

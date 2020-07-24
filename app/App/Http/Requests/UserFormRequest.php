@@ -15,7 +15,7 @@ class UserFormRequest extends FormRequest
      */
     public function authorize()
     {
-        return auth()->user()->can('update-users');
+        return auth()->user()->can('create-users');
     }
 
     /**
@@ -28,14 +28,11 @@ class UserFormRequest extends FormRequest
         $data = [
             'name' => 'required|string',
             'email' => 'required|email|unique:users',
+            'password' => [PasswordRules::register(request()->email)]
         ];
 
-        if (Request::METHOD_POST) {
-            $data['password'] = PasswordRules::register(request()->email);
-            $data['email'] = 'required|email';
-        }
 
-        if (Request::METHOD_PATCH) {
+        if (Request::isMethod('patch') || Request::isMethod('put')) {
             $data['email'] = 'required|email';
             $data['password'] = '';
         }

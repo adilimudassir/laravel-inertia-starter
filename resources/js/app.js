@@ -4,15 +4,15 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
+import '@mdi/font/css/materialdesignicons.css'
 import Vue from 'vue';
 import Vuetify from 'vuetify/lib';
 import { InertiaApp } from '@inertiajs/inertia-vue'
+import './plugins/Validation'
 
 Vue.use(InertiaApp)
-
 Vue.use(Vuetify)
-
-const options = {}
+Vue.mixin({ methods: { route: window.route } })
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -22,6 +22,8 @@ const options = {}
 
 const app = document.getElementById('app')
 
+// Vue.prototype.route = (...args) => route(...args).url()
+
 new Vue({
     render: h => h(InertiaApp, {
         props: {
@@ -29,5 +31,9 @@ new Vue({
             resolveComponent: name => import(`./Pages/${name}`).then(module => module.default),
         }
     }),
-    vuetify: new Vuetify(options)
+    vuetify: new Vuetify({
+        icons: {
+            iconfont: 'mdi', // default - only for display purposes
+        },
+    })
 }).$mount(app)
