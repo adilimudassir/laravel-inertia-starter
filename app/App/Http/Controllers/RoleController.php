@@ -52,7 +52,7 @@ class RoleController extends Controller
 
         return redirect()
             ->route('roles.index')
-            ->withFlashSuccess('Role Added Successfully!');
+            ->withSuccess('Role Added Successfully!');
     }
 
     public function show($id)
@@ -85,7 +85,7 @@ class RoleController extends Controller
 
         return redirect()
             ->route('roles.index')
-            ->withFlashSuccess('Role Updated Successfully!');
+            ->withSuccess('Role Updated Successfully!');
     }
 
     public function destroy($id)
@@ -96,6 +96,6 @@ class RoleController extends Controller
 
         return redirect()
             ->route('roles.index')
-            ->withFlashSuccess('Role Deleted Successfully!');
+            ->withSuccess('Role Deleted Successfully!');
     }
 }

@@ -2,15 +2,15 @@
 
 namespace Domains\Auth\Repositories;
 
-use Domains\General\Exceptions\GeneralException;
-use App\Repositories\BaseRepository;
-use App\Http\Requests\UserFormRequest;
-use Domains\Auth\Events\UserCreated;
-use Domains\Auth\Events\UserUpdated;
-use Domains\Auth\Exceptions\UserException;
 use Domains\Auth\Models\User;
 use Illuminate\Support\Facades\DB;
+use App\Repositories\BaseRepository;
+use Domains\Auth\Events\UserCreated;
+use Domains\Auth\Events\UserUpdated;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Requests\UserFormRequest;
+use Domains\Auth\Exceptions\UserException;
+use Domains\General\Exceptions\GeneralException;
 
 class UserRepository extends BaseRepository
 {
@@ -24,6 +24,23 @@ class UserRepository extends BaseRepository
         $this->model = $user;
     }
 
+    public function getAllWithRoles()
+    {
+        return $this->get()->map( function($user) {
+            return [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'created_at' => $user->created_at,
+                'updated_at' => $user->updated_at,
+                'active' => $user->active,
+                'verified' => $user->hasVerifiedEmail(),
+                'roles' => $user->roles->pluck('name')->toArray()
+            ];
+        });
+        
+    }
+
     public function create(UserFormRequest $request): User
     {
         return DB::transaction(function () use ($request) {
@@ -31,8 +48,8 @@ class UserRepository extends BaseRepository
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
-                'active' => $request->has('status') ? 1 : 0,
-                'email_verified_at' => $request->has('confirmed') ? now() : null,
+                'active' => $request->status ? 1 : 0,
+                'email_verified_at' => $request->confirmed ? now() : null,
             ]);
 
             if (! $newUser) {
@@ -57,8 +74,8 @@ class UserRepository extends BaseRepository
             if (! $user->update([
                 'name' => $request->name,
                 'email' => $request->email,
-                'active' => $request->has('status') ? 1 : 0,
-                'email_verified_at' => $request->has('confirmed') ? now() : null,
+                'active' => $request->status ? 1 : 0,
+                'email_verified_at' => $request->confirmed ? now() : null,
             ])) {
                 throw new UserException('User Could not be updated');
             }

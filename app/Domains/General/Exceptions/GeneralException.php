@@ -40,10 +40,9 @@ class GeneralException extends Exception
      */
     public function render($request)
     {
-        // All instances of GeneralException redirect back with a flash message to show a bootstrap alert-error
         return redirect()
             ->back()
             ->withInput()
-            ->withFlashDanger($this->message);
+            ->withError($this->message);
     }
 }

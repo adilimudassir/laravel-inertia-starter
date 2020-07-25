@@ -2,15 +2,15 @@
 
 namespace Domains\Auth\Models;
 
+use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Notifications\Notifiable;
 use Altek\Accountant\Contracts\Recordable;
-use Domains\Auth\Notifications\ResetPasswordNotification;
+use Lab404\Impersonate\Models\Impersonate;
 use Domains\Auth\Notifications\VerifyEmail;
-use Illuminate\Auth\MustVerifyEmail as MustVerifyEmailTrait;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Lab404\Impersonate\Models\Impersonate;
-use Spatie\Permission\Traits\HasRoles;
+use Domains\Auth\Notifications\ResetPasswordNotification;
+use Illuminate\Auth\MustVerifyEmail as MustVerifyEmailTrait;
 
 class User extends Authenticatable implements Recordable, MustVerifyEmail
 {
@@ -51,6 +51,8 @@ class User extends Authenticatable implements Recordable, MustVerifyEmail
     protected $dates = [
         'last_login_at',
         'email_verified_at',
+        'created_at',
+        'updated_at'
     ];
 
     /**

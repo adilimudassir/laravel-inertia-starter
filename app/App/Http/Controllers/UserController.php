@@ -32,7 +32,7 @@ class UserController extends Controller
         $this->authorize('read-users');
 
         return Inertia::render('Users/Index', [
-            'users' => $this->userRepository->all(['id', 'name', 'email', 'created_at'])
+            'users' => $this->userRepository->getAllWithRoles()
         ]);
     }
 
@@ -59,19 +59,35 @@ class UserController extends Controller
     public function show($id)
     {
         $this->authorize('read-users');
-
+        $user = $this->userRepository->getById($id);
         return Inertia::render('Users/Show', [
-            'user' => $this->userRepository->getById($id),
+            'user' => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'active' => $user->active,
+                'email_verified_at' => $user->email_verified_at,
+                'created_at' => $user->created_at,
+                'roles' => $user->roles->pluck('name')->toArray(),
+            ]
         ]);
     }
 
     public function edit($id, RoleRepository $roleRepository)
     {
         $this->authorize('update-users');
-
+        $user = $this->userRepository->getById($id);
         return Inertia::render('Users/Edit', [
-            'user' => $this->userRepository->getById($id),
-            'roles' => $roleRepository->all()->pluck('name', 'id'),
+            'user' => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'active' => $user->active,
+                'email_verified_at' => $user->email_verified_at,
+                'created_at' => $user->created_at,
+                'roles' => $user->roles->pluck('id')->toArray(),
+            ],
+            'roles' => $roleRepository->all(['name', 'id']),
         ]);
     }
 
@@ -85,7 +101,7 @@ class UserController extends Controller
         );
 
         return redirect()
-            ->route('users.index')
+            ->route('users.show', $id)
             ->withSuccess('User Updated Successfully!');
     }
 

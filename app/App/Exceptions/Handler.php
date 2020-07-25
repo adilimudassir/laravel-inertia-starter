@@ -54,7 +54,7 @@ class Handler extends ExceptionHandler
         if ($exception instanceof UnauthorizedException) {
             return redirect()
                 ->route(home_route())
-                ->withFlashDanger(__('You do not have access to do that.'));
+                ->withError(__('You do not have access to do that.'));
         }
 
         return parent::render($request, $exception);

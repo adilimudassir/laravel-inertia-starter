@@ -52,9 +52,8 @@
 import FlashMessages from "@/Components/FlashMessages";
 import { LoadingButtonMixin } from '@/Mixins/LoadingButtonMixin';
 export default {
-  components: {
-    FlashMessages,
-  },
+  metaInfo: { title: 'Login' },
+  components: { FlashMessages },
   mixins: [LoadingButtonMixin],
   data() {
     return {  

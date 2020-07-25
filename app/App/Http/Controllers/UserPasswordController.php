@@ -37,9 +37,9 @@ class UserPasswordController
         );
 
         if ($request->has('current_password')) {
-            return redirect()->route('dashboard')->withFlashSuccess('Password Updated');
+            return redirect()->route('users.show', $id)->withSuccess('Password Updated');
         } else {
-            return redirect()->route('users.index')->withFlashSuccess('Password Updated');
+            return redirect()->route('users.index')->withSuccess('Password Updated');
         }
     }
 }

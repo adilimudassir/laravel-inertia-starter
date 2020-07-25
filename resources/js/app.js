@@ -9,25 +9,24 @@ import Vue from 'vue';
 import Vuetify from 'vuetify/lib';
 import { InertiaApp } from '@inertiajs/inertia-vue'
 import './plugins/Validation'
+import VueMeta from 'vue-meta';
 
+Vue.use(VueMeta)
 Vue.use(InertiaApp)
 Vue.use(Vuetify)
 Vue.mixin({ methods: { route: window.route } })
 
-/**
- * Next, we will create a fresh Vue application instance and attach it to
- * the page. Then, you may begin adding components to this application
- * or customize the JavaScript scaffolding to fit your unique needs.
- */
 
 const app = document.getElementById('app')
-
-// Vue.prototype.route = (...args) => route(...args).url()
+const page = JSON.parse(app.dataset.page);
 
 new Vue({
+    metaInfo: {
+        titleTemplate: (title) => title ? `${title} - ${page.props.app.name}` : `${page.props.app.name}`
+    },
     render: h => h(InertiaApp, {
         props: {
-            initialPage: JSON.parse(app.dataset.page),
+            initialPage: page,
             resolveComponent: name => import(`./Pages/${name}`).then(module => module.default),
         }
     }),

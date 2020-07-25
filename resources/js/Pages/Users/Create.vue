@@ -1,10 +1,10 @@
 <template>
   <v-card outlined class="mt-7">
-    <v-card-title>
+    <v-card-title class="mt-10">
       New User
       <v-spacer></v-spacer>
       <inertia-link class="white--text text-decoration-none" :href="route('users.index')">
-        <v-btn color="blue white--text" dark top absolute right fab>
+        <v-btn color="blue white--text" small top absolute left fab>
           <v-icon>mdi-keyboard-backspace</v-icon>
         </v-btn>
       </inertia-link>
@@ -21,7 +21,7 @@
           <ValidationProvider
             v-slot="{ errors }"
             name="Password"
-            rules="required|min:2|confirmed:confirm_password"
+            rules="required|min:2|confirmed:password_confirmation"
           >
             <v-text-field
               v-model="form.password"
@@ -31,16 +31,16 @@
               required
             ></v-text-field>
           </ValidationProvider>
-          <ValidationProvider name="Confirm Password" vid="confirm_password">
-            <v-text-field v-model="form.confirm_password" type="password" label="Confirm Password"></v-text-field>
+          <ValidationProvider name="Confirm Password" vid="password_confirmation">
+            <v-text-field v-model="form.password_confirmation" type="password" label="Confirm Password"></v-text-field>
           </ValidationProvider>
-          <ValidationProvider v-slot="{ errors }" name="Role" rules="required">
+          <ValidationProvider v-slot="{ errors }" name="Roles" rules="required">
             <v-select
-              v-model="form.role"
+              v-model="form.roles"
               :items="$page.roles"
               :error-messages="errors"
-              label="Role"
-              data-vv-name="role"
+              label="Roles"
+              data-vv-name="roles"
               required
               multiple
               chips
@@ -87,16 +87,17 @@ import Layout from "@/Components/Layout";
 import { LoadingButtonMixin } from "@/Mixins/LoadingButtonMixin";
 
 export default {
+  metaInfo: { title: "New User" },
   mixins: [LoadingButtonMixin],
   data: () => ({
     form: {
       name: "",
       email: "",
-      role: "",
+      roles: [],
       status: true,
       confirmed: true,
       password: "",
-      confirm_password: "",
+      password_confirmation: "",
     },
   }),
   layout: Layout,
@@ -112,7 +113,7 @@ export default {
       });
     },
     clear() {
-      this.form.name = this.form.email = this.form.password = this.form.role = this.form.confirm_password =
+      this.form.name = this.form.email = this.form.password = this.form.roles = this.form.password_confirmation =
         "";
       this.form.confirmed = this.form.status = true;
       this.$refs.observer.reset();
