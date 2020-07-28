@@ -14,7 +14,9 @@ class DashboardController extends Controller
     
     public function __invoke()
     {
-        session()->flash('success', 'Welcome');
+        $name = auth()->user()->name;
+        
+        session()->flash('success', "Welcome, $name");
         
         return Inertia::render('Dashboard');
     }

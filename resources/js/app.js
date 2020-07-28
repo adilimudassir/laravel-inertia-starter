@@ -4,18 +4,18 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-import '@mdi/font/css/materialdesignicons.css'
+
 import Vue from 'vue';
-import Vuetify from 'vuetify/lib';
-import { InertiaApp } from '@inertiajs/inertia-vue'
-import './plugins/Validation'
 import VueMeta from 'vue-meta';
+import Vuetify from './Plugins/Vuetify';
+import { InertiaApp } from '@inertiajs/inertia-vue';
+import store from './Store';
+
+import './Plugins/Validation';
+import './Mixins/Global';
 
 Vue.use(VueMeta)
 Vue.use(InertiaApp)
-Vue.use(Vuetify)
-Vue.mixin({ methods: { route: window.route } })
-
 
 const app = document.getElementById('app')
 const page = JSON.parse(app.dataset.page);
@@ -30,9 +30,6 @@ new Vue({
             resolveComponent: name => import(`./Pages/${name}`).then(module => module.default),
         }
     }),
-    vuetify: new Vuetify({
-        icons: {
-            iconfont: 'mdi', // default - only for display purposes
-        },
-    })
+    vuetify: Vuetify,
+    store
 }).$mount(app)

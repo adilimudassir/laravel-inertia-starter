@@ -1,9 +1,7 @@
 <template>
   <v-card outlined class="mt-7">
-    <v-card-title>
-      <v-subtitle class="mt-10">
+    <v-card-title class="mt-10">
         Edit User
-      </v-subtitle>
       <v-spacer></v-spacer>
       <inertia-link class="white--text text-decoration-none" :href="route('users.show', $page.user.id)">
         <v-btn color="blue white--text" small top absolute left fab>

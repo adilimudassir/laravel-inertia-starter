@@ -44,17 +44,40 @@ class AppServiceProvider extends ServiceProvider
                         'name' => Auth::user()->name,
                         'email' => Auth::user()->email,
                         'role' => Auth::user()->role,
+                        'permissions' => Auth::user()->getAllPermissions()->pluck('name')->toArray()
                     ] : null,
                 ];
             },
             'flash' => function () {
-                return [
-                    'success' => Session::get('success'),
-                    'error' => Session::get('error'),
-                    'warning' => Session::get('warning'),
-                    'info' => Session::get('info'),
-                    
-                ];
+                if (Session::has('success')) {
+                    return [
+                        'message' => Session::get('success'),
+                        'type' => 'success'
+                    ];
+                }
+
+                if (Session::has('error')) {
+                    return [
+                        'message' => Session::get('error'),
+                        'type' => 'error'
+                    ];
+                }
+
+                if (Session::has('info')) {
+                    return [
+                        'message' => Session::get('info'),
+                        'type' => 'info'
+                    ];
+                }
+
+                if (Session::has('warning')) {
+                    return [
+                        'message' => Session::get('warning'),
+                        'type' => 'warning'
+                    ];
+                }
+
+                return null;
             },
             'errors' => function () {
                 return Session::get('errors')

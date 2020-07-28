@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use Inertia\Inertia;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RoleFormRequest;
-use Domains\Auth\Repositories\PermissionRepository;
 use Domains\Auth\Repositories\RoleRepository;
+use Domains\Auth\Repositories\PermissionRepository;
 
 class RoleController extends Controller
 {
@@ -30,8 +31,8 @@ class RoleController extends Controller
     {
         $this->authorize('read-roles');
 
-        return view('roles.index', [
-            //
+        return Inertia::render('Roles/Index', [
+            'roles' => $this->roleRepository->getAllWithPermissions()
         ]);
     }
 
@@ -39,8 +40,8 @@ class RoleController extends Controller
     {
         $this->authorize('create-roles');
 
-        return view('roles.create', [
-            'permissions' => $permissionRepository->all()->pluck('name', 'id'),
+        return Inertia::render('Roles/Create', [
+            'permissions' => $permissionRepository->all(['name', 'id'])->toArray()
         ]);
     }
 
@@ -55,21 +56,18 @@ class RoleController extends Controller
             ->withSuccess('Role Added Successfully!');
     }
 
-    public function show($id)
-    {
-        $this->authorize('read-roles');
-
-        return view('roles.show', [
-            'role' => $this->roleRepository->getById($id),
-        ]);
-    }
-
     public function edit($id, PermissionRepository $permissionRepository)
     {
         $this->authorize('update-roles');
 
-        return view('roles.edit', [
-            'role' => $this->roleRepository->getById($id),
+        $role = $this->roleRepository->getById($id);
+
+        return Inertia::render('Roles/edit', [
+            'role' => [
+                'id' => $role->id,
+                'name' => $role->name,
+                'permissions' => $role->permissions->pluck('name')->toArray()
+            ],
             'permissions' => $permissionRepository->all()->pluck('name', 'id'),
         ]);
     }
@@ -84,7 +82,7 @@ class RoleController extends Controller
         );
 
         return redirect()
-            ->route('roles.index')
+            ->route('roles.show', $id)
             ->withSuccess('Role Updated Successfully!');
     }
 
@@ -92,7 +90,7 @@ class RoleController extends Controller
     {
         $this->authorize('delete-roles');
 
-        $this->roleRepository->delete($id);
+        $this->roleRepository->deleteById($id);
 
         return redirect()
             ->route('roles.index')

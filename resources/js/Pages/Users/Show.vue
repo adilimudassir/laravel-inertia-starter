@@ -1,24 +1,25 @@
 <template>
-  <v-card outlined col="grey lighten-4" class="mt-7">
+  <v-card class="mt-7">
     <v-card-title>
       <inertia-link class="white--text text-decoration-none" :href="route('users.index')">
         <v-btn color="blue white--text" small top absolute left fab>
           <v-icon>mdi-keyboard-backspace</v-icon>
         </v-btn>
       </inertia-link>
-      <v-tabs v-model="tab" centered slider-color="green">
-        <v-tab :href="'#profile'">Profile</v-tab>
-        <v-tab :href="'#password'">Password</v-tab>
+      <v-tabs v-model="tab" centered fixed-tabs slider-color="blue">
+        <v-tab>Profile</v-tab>
+        <v-tab>Password</v-tab>
       </v-tabs>
     </v-card-title>
     <v-card-text>
       <v-tabs-items v-model="tab">
-        <v-tab-item value="profile">
-          <v-card outlined>
+        <v-tab-item>
+          <v-card>
             <v-card-title>
               <inertia-link
                 class="white--text text-decoration-none"
                 :href="route('users.edit', $page.user.id)"
+                v-if="userCan('update-users')"
               >
                 <v-btn color="red white--text" small top absolute right fab>
                   <v-icon>mdi-pencil</v-icon>
@@ -86,10 +87,8 @@
                     <v-list-item-subtitle class="text-right">
                       <ul type="none">
                         <li v-for="(role, index) in $page.user.roles" :key="index">
-                        <v-chip label class="ma-1" color="defualt">
-                          {{ role }}
-                        </v-chip>
-                      </li>
+                          <v-chip label class="ma-1" color="defualt">{{ role }}</v-chip>
+                        </li>
                       </ul>
                     </v-list-item-subtitle>
                   </v-list-item-content>
@@ -99,8 +98,8 @@
             <v-card-actions></v-card-actions>
           </v-card>
         </v-tab-item>
-        <v-tab-item value="password">
-          <v-card outlined class="mt-7">
+        <v-tab-item>
+          <v-card class="mt-7">
             <v-card-title class="mt-10">Change Your Password</v-card-title>
             <v-card-text>
               <ValidationObserver ref="observer">
@@ -158,7 +157,7 @@ export default {
   metaInfo: { title: "Viwing User" },
   mixins: [LoadingButtonMixin],
   data: () => ({
-    tab: "user",
+    tab: null,
     form: {
       current_password: "",
       password: "",

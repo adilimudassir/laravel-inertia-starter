@@ -1,54 +1,41 @@
 <template>
-    <v-row no-gutters>
-      <v-col >
-        <v-alert
-          text
-          type="info"
-          :dismissible="true"
-          class="white"
-          v-if="$page.flash.info"
-        >{{ $page.flash.info }}</v-alert>
-        <v-alert
-          text
-          type="success"
-          :dismissible="true"
-          class="white"
-          v-if="$page.flash.success"
-        >{{ $page.flash.success }}</v-alert>
-        <v-alert
-          text
-          type="error"
-          :dismissible="true"
-          class="white"
-          v-if="$page.flash.error"
-        >{{ $page.flash.error }}</v-alert>
-        <v-alert
-          text
-          type="warning"
-          :dismissible="true"
-          class="white"
-          v-if="$page.flash.warning"
-        >{{ $page.flash.warning }}</v-alert>
+  <div class="text-center ma-2">
+    <v-scale-transition mode="out-in" origin="center center">
+      <v-snackbar
+        :color="$store.state.flashMessage.type"
+        class="elevation-2"
+        top
+        right
+        v-model="$store.state.flashMessage.show"
+      >
+        {{ $store.state.flashMessage.text }}
+        <template v-slot:action="{ attrs }">
+          <v-btn color="white" text v-bind="attrs" @click="close()">Close</v-btn>
+        </template>
+      </v-snackbar>
+    </v-scale-transition>
 
-        <v-alert
-          text
-          border="left"
-          color="red accent-4"
-          :dismissible="true"
-          class="white"
-          v-if="Object.keys($page.errors).length > 0"
-        >
-          <ul>
-            <li v-for="(error, index) in $page.errors" :key="index">{{ error[0] }}</li>
-          </ul>
-        </v-alert>
-      </v-col>
-    </v-row>
+    <v-alert
+      text
+      border="left"
+      color="red accent-4"
+      :dismissible="true"
+      class="white"
+      v-if="Object.keys($page.errors).length > 0"
+    >
+      <ul>
+        <li v-for="(error, index) in $page.errors" :key="index">{{ error[0] }}</li>
+      </ul>
+    </v-alert>
+  </div>
 </template>
 
 <script>
 export default {
-  data: () => ({}),
-  methods: {},
+  methods: {
+    close() {
+      this.$store.dispatch("clearMessage");
+    },
+  },
 };
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <v-card outlined class="mt-7">
+  <v-card class="mt-7">
     <v-card-title>
       Users
       <v-spacer></v-spacer>
@@ -14,6 +14,7 @@
         <inertia-link
           class="white--text small text-decoration-none mb-7"
           :href="route('users.create')"
+          v-if="userCan('create-users')"
         >
           <v-btn color="green white--text" small top absolute right fab>
             <v-icon>mdi-plus</v-icon>
@@ -60,11 +61,16 @@
           <inertia-link
             class="white--white text-decoration-none"
             :href="route('users.show', item.id)"
+            v-if="userCan('read-users')"
           >
-            <v-btn color="default">
-              <v-icon large class="mr-2">mdi-chevron-right</v-icon>
+            <v-btn small color="default">
+              <v-icon class="">mdi-chevron-right</v-icon>
             </v-btn>
-          </inertia-link>
+          </inertia-link> <br>
+          <confirm-dialogue
+            v-if="userCan('delete-users')"
+            v-on:performAction="deleteItem(item.id)"
+          />
         </template>
       </v-data-table>
     </v-card-text>
@@ -72,6 +78,7 @@
 </template>
 <script>
 import Layout from "@/Components/Layout";
+import ConfirmDialogue from '@/Components/ConfirmDialogue'
 export default {
   metaInfo: { title: "Users" },
   data: () => ({
@@ -89,5 +96,11 @@ export default {
     ],
   }),
   layout: Layout,
+  components: { ConfirmDialogue },
+  methods: {
+    deleteItem(id) {
+      this.$inertia.delete(route('users.delete', id));
+    }
+  }
 };
 </script>

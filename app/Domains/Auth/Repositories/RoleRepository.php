@@ -2,13 +2,13 @@
 
 namespace Domains\Auth\Repositories;
 
-use App\Repositories\BaseRepository;
-use App\Http\Requests\RoleFormRequest;
-use Domains\Auth\Events\RoleCreated;
-use Domains\Auth\Events\RoleUpdated;
-use Domains\Auth\Exceptions\RoleException;
 use Domains\Auth\Models\Role;
 use Illuminate\Support\Facades\DB;
+use App\Repositories\BaseRepository;
+use Domains\Auth\Events\RoleCreated;
+use Domains\Auth\Events\RoleUpdated;
+use App\Http\Requests\RoleFormRequest;
+use Domains\Auth\Exceptions\RoleException;
 
 class RoleRepository extends BaseRepository
 {
@@ -20,6 +20,21 @@ class RoleRepository extends BaseRepository
     public function __construct(Role $role)
     {
         $this->model = $role;
+    }
+
+    public function getAllWithPermissions()
+    {
+        return $this->get()->map(function ($role) {
+            return [
+                'id' => $role->id,
+                'name' => $role->name,
+                'created_at' => $role->created_at,
+                'updated_at' => $role->updated_at,
+                'permissions' => $role->permissions->pluck('name')->toArray(),
+                'users_count' => $role->users->count(),
+                'users' => $role->users->pluck('name')->toArray()
+            ];
+        });
     }
 
     public function create(RoleFormRequest $request): Role

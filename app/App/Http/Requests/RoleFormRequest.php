@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Request;
+use Illuminate\Foundation\Http\FormRequest;
 
 class RoleFormRequest extends FormRequest
 {
@@ -32,7 +32,7 @@ class RoleFormRequest extends FormRequest
             'name' => 'required|string|unique:roles',
         ];
 
-        if (Request::METHOD_PATCH) {
+        if (Request::isMethod('patch') || Request::isMethod('put')) {
             $data['name'] = 'required|string';
         }
 
