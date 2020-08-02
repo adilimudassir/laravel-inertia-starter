@@ -2,13 +2,13 @@
   <div class="text-center ma-2">
     <v-scale-transition mode="out-in" origin="center center">
       <v-snackbar
-        :color="$store.state.flashMessage.type"
+        :color="color"
         class="elevation-2"
         top
         right
-        v-model="$store.state.flashMessage.show"
+        v-model="show"
       >
-        {{ $store.state.flashMessage.text }}
+        {{ message }}
         <template v-slot:action="{ attrs }">
           <v-btn color="white" text v-bind="attrs" @click="close()">Close</v-btn>
         </template>
@@ -32,10 +32,31 @@
 
 <script>
 export default {
+  data: () => ({
+    show: false
+  }),
   methods: {
     close() {
-      this.$store.dispatch("clearMessage");
+      // this.$store.dispatch("clearMessage");
+      this.show = false;
     },
   },
+  computed: {
+    color() {
+      if (this.$page.flash == null || typeof(this.$page.flash) == undefined) return
+      return this.$page.flash.type;
+    },
+    message() {
+      if (this.$page.flash == null || typeof(this.$page.flash) == undefined) return
+      // if(this.show) {
+      //   this.show = false;
+      //   setTimeout(() => {
+      //     this.show = true;
+      //   }, 50);
+      // }
+      this.show = true;
+      return this.$page.flash.message;
+    }
+  }
 };
 </script>

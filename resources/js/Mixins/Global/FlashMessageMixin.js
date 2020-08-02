@@ -5,7 +5,7 @@ const page = JSON.parse(app.dataset.page);
 
 Vue.mixin({
     created() {
-        this.dispatchFlashMessage();
+        // this.dispatchFlashMessage();
     },
     methods: {
         dispatchFlashMessage() {
