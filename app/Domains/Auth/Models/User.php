@@ -8,6 +8,7 @@ use Altek\Accountant\Contracts\Recordable;
 use Lab404\Impersonate\Models\Impersonate;
 use Domains\Auth\Notifications\VerifyEmail;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Domains\Auth\Notifications\ResetPasswordNotification;
 use Illuminate\Auth\MustVerifyEmail as MustVerifyEmailTrait;
@@ -17,6 +18,7 @@ class User extends Authenticatable implements Recordable, MustVerifyEmail
     use HasRoles,
         Notifiable,
         Impersonate,
+        HasFactory,
         MustVerifyEmailTrait,
         \Altek\Accountant\Recordable;
 

@@ -1,6 +1,11 @@
 <?php
+namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Database\Seeders\Auth\UserRoleSeeder;
+use Database\Seeders\Auth\UserTableSeeder;
+use Database\Seeders\FakeUsersTableSeeder;
+use Database\Seeders\Auth\PermissionRoleTableSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -14,7 +19,7 @@ class DatabaseSeeder extends Seeder
         $this->call(UserTableSeeder::class);
         $this->call(PermissionRoleTableSeeder::class);
         $this->call(UserRoleSeeder::class);
-        $this->call(FakeUsersTableSeeder::class);
+        // $this->call(FakeUsersTableSeeder::class);
 
     }
 }

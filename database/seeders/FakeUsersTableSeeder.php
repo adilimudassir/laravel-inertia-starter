@@ -1,5 +1,7 @@
 <?php
+namespace Database\Seeders;
 
+use Domains\Auth\Models\User;
 use Illuminate\Database\Seeder;
 
 class FakeUsersTableSeeder extends Seeder
@@ -11,6 +13,6 @@ class FakeUsersTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(\Domains\Auth\Models\User::class, 500)->create();
+        User::factory()->count(100)->create();
     }
 }
