@@ -26,16 +26,11 @@ class UserFormRequest extends FormRequest
     {
         $data = [
             'name' => 'required|string',
-            'email' => 'required|email|unique:users'
+            'email' => 'required|email|unique:users',
+            'password' => 'required|confirmed'
         ];
 
-
-        if (Request::METHOD_POST) {
-            $data['password'] = 'required|confirmed';
-            $data['email'] = 'required|email';
-        }
-
-        if (Request::METHOD_PATCH) {
+        if (request()->isMethod('PATCH')) {
             $data['email'] = 'required|email';
             $data['password'] = '';
         }
